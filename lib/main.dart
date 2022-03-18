@@ -1,8 +1,13 @@
 import 'package:credit_card/pages/CardPage.dart';
 import 'package:credit_card/pages/HomePage.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
-void main() {
+void main()async {
+  await Hive.initFlutter();
+  await Hive.openBox('Hive');
+
   runApp(const MyApp());
 }
 
@@ -18,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CardPage(),
+      home: HomePage(),
       routes: {
         HomePage.id: (context) => HomePage(),
         CardPage.id: (context) => CardPage(),

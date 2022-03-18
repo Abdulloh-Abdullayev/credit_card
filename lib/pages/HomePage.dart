@@ -1,5 +1,6 @@
 import 'package:credit_card/models/card_model.dart';
 import 'package:credit_card/pages/CardPage.dart';
+import 'package:credit_card/services/hive_services.dart';
 import 'package:credit_card/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
@@ -16,17 +17,23 @@ class _HomePageState extends State<HomePage> {
 
   List<Welcome> list = [];
 
-  TextEditingController numberController = MaskedTextController(mask: "000 000 000");
-  TextEditingController dataController = MaskedTextController(mask: "00/00");
-  TextEditingController cvvController = MaskedTextController(mask: "000");
+  TextEditingController nameController = TextEditingController();
+  TextEditingController relativeController = TextEditingController();
+  TextEditingController numberController = MaskedTextController(mask: "00 0000000");
 
   void apiCreateComment() {
-    String cardNumber = numberController.text.trim().toString();
-    String data = dataController.text.trim().toString();
-    String cvv = cvvController.text.trim().toString();
+    String name = nameController.text.trim().toString();
+    String relative = relativeController.text.trim().toString();
+    String number = numberController.text.trim().toString();
 
 
-    Welcome value = Welcome(cardNumber: cardNumber, data: data, cvv: cvv, id: "");
+    Welcome value = Welcome(name: name, relative: relative, number: number, id: "");
+
+    /// Saqlayapti
+    HiveDB().storeUser(value);
+
+    /// Olayapti
+    var user = HiveDB().loadUser();
 
     Network.POST(Network.API_CARDS, Network.paramsCreate(value)).then((value){
       setState(() {
@@ -37,78 +44,104 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Text("Add your card", style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),),
-            ),
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Text("Your card number", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: TextField(
-                controller: numberController,
-                keyboardType: TextInputType.text,
-                decoration: const InputDecoration(
-                  hintText: 'Card Number',
+    return  SafeArea(
+      child: Scaffold(
+          body: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(left: 60,right: 60),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text("Add Recipients",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
+                    ),
+                    SizedBox(height: 60,),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Text("Name",style: TextStyle(color: Colors.black, fontSize: 16,fontWeight: FontWeight.bold),),
+                    ),
+                    Container(
+                      child: TextField(
+                        controller: nameController,
+                        style: TextStyle(fontSize: 15),
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.person),
+                            fillColor: Colors.grey.shade50,
+                            filled: true,
+                            contentPadding: EdgeInsets.all(10),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            hintText: "What's your name?",
+                            hintStyle: TextStyle(color: Colors.grey)),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Text("Relationship",style: TextStyle(color: Colors.black, fontSize: 16,fontWeight: FontWeight.bold),),
+                    ),
+                    Container(
+                      child: TextField(
+                        controller: relativeController,
+                        style: TextStyle(fontSize: 15),
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.people),
+                            fillColor: Colors.grey.shade50,
+                            filled: true,
+                            contentPadding: EdgeInsets.all(10),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            hintText: "What's your Relationship name?",
+                            hintStyle: TextStyle(color: Colors.grey)),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Text("Phone Number",style: TextStyle(color: Colors.black, fontSize: 16,fontWeight: FontWeight.bold),),
+                    ),
+                    Container(
+                      child: TextField(
+                        controller: numberController,
+                        style: TextStyle(fontSize: 15),
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.phone),
+                            fillColor: Colors.grey.shade50,
+                            filled: true,
+                            contentPadding: EdgeInsets.all(10),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            hintText: "Phone Number",
+                            hintStyle: TextStyle(color: Colors.grey)),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 70,top: 100),
+                      width: MediaQuery.of(context).size.width/3,
+                      height: 40,
+                      child: MaterialButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(60)
+                        ),
+                        onPressed: (){
+                          apiCreateComment();
+                        },
+                        color: Colors.blue,
+                        child: Text("Save",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 18),),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(height: 20,),
-            Row(
-              children: [
-                SizedBox(width: 20,),
-                Expanded(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width/3,
-                    child: TextField(
-                      controller: dataController,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        hintText: 'Data',
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 20,),
-                Expanded(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width/3,
-                    child: TextField(
-                      controller: cvvController,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        hintText: 'CVV',
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 20,),
-              ],
-            ),
-            SizedBox(height: 40,),
-
-            Container(
-              height: 40,
-              child: MaterialButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(60)
-                ),
-                onPressed: (){
-                  apiCreateComment();
-                },
-                color: Colors.blueAccent,
-                child: Text("Add Card", style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
-              ),
-            )
-          ],
-        ),
+          )
       ),
     );
   }

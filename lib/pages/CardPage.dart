@@ -14,6 +14,7 @@ class CardPage extends StatefulWidget {
 
 class _CardPageState extends State<CardPage> {
 
+
   List<Welcome> list = [];
 
   // users get
@@ -57,94 +58,108 @@ class _CardPageState extends State<CardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text("Beneficiary", style: TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold, letterSpacing: 1),),
+          bottom: PreferredSize(
+            preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height*0.08),
+            child: Container(
+              //height:30,
+                width: MediaQuery.of(context).size.width/1.05,
+                padding: EdgeInsets.only( bottom: 8),
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 1.10,
+
+                  child: TextField(
+                    style: TextStyle(fontSize: 15),
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        fillColor: Colors.grey.shade50,
+                        filled: true,
+                        contentPadding: EdgeInsets.all(10),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        hintText: "Search",
+                        hintStyle: TextStyle(color: Colors.grey)),
+                  ),
+                )
+            ),
+
+          )
+      ),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.all(20),
+              child: Text("Recipients", style: TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold, letterSpacing: 1),),
+            ),
             Container(
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: list.length,
-                itemBuilder: (context, index){
-                  return Container(
-                    color: Colors.white,
-                    child: Slidable(
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          SizedBox(
-                            width: 150,
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 0),
-                                child: IconButton(
-                                  onPressed: (){
-                                    delete(list[index].id);
-                                  },
-                                  icon: const Icon(Icons.delete, color: Colors.black,),
-                                ),
+                itemBuilder: (contex, index){
+                  return Slidable(
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 0),
+                              child: IconButton(
+                                onPressed: (){
+                                  delete(list[index].id);
+                                },
+                                icon: const Icon(Icons.delete, color: Colors.red,),
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                      child: Container(
-                        padding: EdgeInsets.all(20),
-                        child: Card(
-                          color: Colors.blue,
-                          elevation: 5,
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Text("VISA",style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),),
-                                padding: EdgeInsets.all(20),
-                                alignment: Alignment.centerRight,
-                              ),
-                              Container(
-                                child: Text(list[index].cardNumber,style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
-                                padding: EdgeInsets.all(20),
-                                alignment: Alignment.center,
-                              ),
-                              Container(
-                                child: Text(list[index].cvv,style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),),
-                                padding: EdgeInsets.all(20),
-                                alignment: Alignment.centerLeft,
-                              ),
-                              Container(
-                                child: Text(list[index].data,style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),),
-                                padding: EdgeInsets.all(20),
-                                alignment: Alignment.bottomRight,
-                              ),
-                            ],
                           ),
+                        )
+                      ],
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: ListTile(
+                        leading: ClipOval(
+                          child: Image.asset("assets/images/img_2.png"),
+                        ),
+                        title: Text(list[index].name, style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold,),),
+                        subtitle:  Text(list[index].number, style: TextStyle(color: Colors.blueGrey, fontSize: 16,),),
+                        trailing: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          onPressed: (){},
+                          color: Colors.blue,
+                          child: Text("Send", style: TextStyle(color: Colors.white, fontSize: 16,),),
                         ),
                       ),
                     ),
                   );
                 },
               ),
-            ),
-
-            GestureDetector(
-              onTap: (){
-                Navigator.pushReplacementNamed(context, HomePage.id);
-              },
-              child: Container(width: double.infinity,
-                height: 300,
-                padding: EdgeInsets.all(20),
-                child: Card(
-                  elevation: 5,
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Text("Add Card",style: TextStyle(color: Colors.black,fontSize: 25),),
-                  ),
-                ),
-              ),
             )
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.pushReplacementNamed(context, HomePage.id);
+        },
+        backgroundColor: Colors.blue,
+        child: Icon(Icons.add,color: Colors.white,size: 30,),
+      ),
     );
   }
+  
 }

@@ -10,28 +10,28 @@ String welcomeToJson(List<Welcome> data) => json.encode(List<dynamic>.from(data.
 
 class Welcome {
   Welcome({
-    required this.cardNumber,
-    required this.data,
-    required this.cvv,
+    required this.name,
+    required this.relative,
+    required this.number,
     required this.id,
   });
 
-  String cardNumber;
-  String data;
-  String cvv;
+  String name;
+  String relative;
+  String number;
   String id;
 
   factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
-    cardNumber: json["cardNumber"],
-    data: json["data"],
-    cvv: json["cvv"],
+    name: json["name"],
+    relative: json["relative"],
+    number: json["number"],
     id: json["id"],
   );
 
   Map<String, dynamic> toJson() => {
-    "cardNumber": cardNumber,
-    "data": data,
-    "cvv": cvv,
+    "name": name,
+    "relative": relative,
+    "number": number,
     "id": id,
   };
 }

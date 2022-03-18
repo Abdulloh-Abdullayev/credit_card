@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 class Network {
 
   // Base url
-  static String BASE_URL = "6232fa8b6de3467dbac4cbe0.mockapi.io";
+  static String BASE_URL = "62345db5debd056201e33fab.mockapi.io";
 
   // Header
   static Map<String, String> headers = {
@@ -14,10 +14,10 @@ class Network {
   };
 
   // Apis
-  static String API_CARDS = "/card/card";
+  static String API_CARDS = "/contact/contact";
 
   static String apidelete(String id) {
-    return "/card/card/$id";
+    return "/contact/contact/$id";
   }
 
   // Methods
@@ -59,9 +59,9 @@ class Network {
 
     static Map<String, dynamic> paramsCreate(Welcome value) {
     Map<String, dynamic> map = {
-      "cardNumber": value.cardNumber,
-      'data': value.data,
-      'cvv': value.cvv,
+      "name": value.name,
+      'relative': value.relative,
+      'number': value.number,
       'id': value.id,
     };
     return map;
