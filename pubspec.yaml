@@ -1,4 +1,4 @@
-name: credit_card
+name: contact
 description: A new Flutter project.
 
 
@@ -23,6 +23,7 @@ dependencies:
   flutter_masked_text2: ^0.9.1
   hive:
   hive_flutter:
+  get: ^4.6.1
 
 dev_dependencies:
   flutter_test:

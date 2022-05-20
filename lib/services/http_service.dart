@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:credit_card/models/card_model.dart';
+import 'package:contact/models/card_model.dart';
 import 'package:http/http.dart';
 
 
@@ -20,7 +20,7 @@ class Network {
     return "/contact/contact/$id";
   }
 
-  // Methods
+  /// Methods
 
   // get method
   static Future<String?> GET(String api, Map<String, dynamic> params) async {
@@ -56,6 +56,8 @@ class Network {
     }
     return null;
   }
+
+  /// Params
 
     static Map<String, dynamic> paramsCreate(Welcome value) {
     Map<String, dynamic> map = {

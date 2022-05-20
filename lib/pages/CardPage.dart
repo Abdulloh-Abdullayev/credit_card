@@ -1,8 +1,11 @@
-import 'package:credit_card/models/card_model.dart';
-import 'package:credit_card/pages/HomePage.dart';
-import 'package:credit_card/services/http_service.dart';
+import 'package:contact/controller/card_controller.dart';
+import 'package:contact/models/card_model.dart';
+import 'package:contact/pages/HomePage.dart';
+import 'package:contact/services/http_service.dart';
+import 'package:contact/views/item_of_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
 
 class CardPage extends StatefulWidget {
   const CardPage({Key? key}) : super(key: key);
@@ -15,43 +18,10 @@ class CardPage extends StatefulWidget {
 class _CardPageState extends State<CardPage> {
 
 
-  List<Welcome> list = [];
-
-  // users get
-  void apiGet() {
-    Network.GET(Network.API_CARDS, Network.paramEmpty()).then((value){
-      if (value != null) {
-        _showResponse(value);
-      }
-    });
-  }
-
-  // delete method
-  void delete(String id) {
-    Network.DELETE(Network.apidelete(id), Network.paramEmpty()).then((value) {
-      if(value != null) {
-        print(value);
-        setState(() {
-          apiGet();
-        });
-      } else {
-        //error msg
-      }
-    });
-  }
-
-
-  void _showResponse(String response) {
-    List <Welcome> listCard = Network.parseUsersList(response);
-    setState(() {
-      list = listCard;
-    });
-  }
-
   @override
   void initState() {
-    apiGet();
     super.initState();
+    Get.find<CardController>().apiGet();
   }
 
 
@@ -93,68 +63,33 @@ class _CardPageState extends State<CardPage> {
 
           )
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: EdgeInsets.all(20),
-              child: Text("Recipients", style: TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold, letterSpacing: 1),),
-            ),
-            Container(
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: list.length,
-                itemBuilder: (contex, index){
-                  return Slidable(
-                    endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 0),
-                              child: IconButton(
-                                onPressed: (){
-                                  delete(list[index].id);
-                                },
-                                icon: const Icon(Icons.delete, color: Colors.red,),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: ListTile(
-                        leading: ClipOval(
-                          child: Image.asset("assets/images/img_2.png"),
-                        ),
-                        title: Text(list[index].name, style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold,),),
-                        subtitle:  Text(list[index].number, style: TextStyle(color: Colors.blueGrey, fontSize: 16,),),
-                        trailing: MaterialButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          onPressed: (){},
-                          color: Colors.blue,
-                          child: Text("Send", style: TextStyle(color: Colors.white, fontSize: 16,),),
-                        ),
-                      ),
-                    ),
-                  );
-                },
+      body: GetBuilder<CardController>(
+        init: CardController(),
+        builder: (CardController controller) => SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.all(20),
+                child: Text("Recipients", style: TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold, letterSpacing: 1),),
               ),
-            )
-          ],
+              Container(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: controller.list.length,
+                  itemBuilder: (context, index){
+                    return itemOfContact(controller.list[index], controller, context);
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.pushReplacementNamed(context, HomePage.id);
+          Get.to(HomePage());
         },
         backgroundColor: Colors.blue,
         child: Icon(Icons.add,color: Colors.white,size: 30,),

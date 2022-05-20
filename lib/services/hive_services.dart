@@ -1,6 +1,6 @@
 
 
-import 'package:credit_card/models/card_model.dart';
+import 'package:contact/models/card_model.dart';
 import 'package:hive/hive.dart';
 
 class HiveDB {
