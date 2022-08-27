@@ -69,13 +69,6 @@ class Network {
     return map;
   }
 
-  // static Map<String, dynamic> params() {
-  //   Map<String, dynamic> map = {
-  //
-  //   };
-  //   return map;
-  // }
-
   // Params
   static Map<String, dynamic> paramEmpty() {
     Map<String, dynamic> map = {};

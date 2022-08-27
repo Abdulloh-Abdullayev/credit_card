@@ -17,13 +17,13 @@ dependencies:
 
 
 
-  cupertino_icons: ^1.0.2
-  flutter_slidable: ^1.2.0
-  http: ^0.13.4
-  flutter_masked_text2: ^0.9.1
+  cupertino_icons:
+  flutter_slidable:
+  http:
+  flutter_masked_text2:
   hive:
   hive_flutter:
-  get: ^4.6.1
+  get:
 
 dev_dependencies:
   flutter_test:

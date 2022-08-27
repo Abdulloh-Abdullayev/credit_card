@@ -21,17 +21,15 @@ class HomeController extends GetxController{
 
     Welcome value = Welcome(name: name, relative: relative, number: number, id: "");
 
+    Network.POST(Network.API_CARDS, Network.paramsCreate(value)).then((value){
+      Get.offAll(CardPage());
+      update();
+    });
+
     /// Saqlayapti
     HiveDB().storeUser(value);
 
     /// Olayapti
     var user = HiveDB().loadUser();
-
-    Network.POST(Network.API_CARDS, Network.paramsCreate(value)).then((value){
-       // Navigator.pushReplacementNamed(context, CardPage.id);
-      // Get.to(CardPage());
-      Get.offAll(CardPage());
-      update();
-    });
   }
 }
